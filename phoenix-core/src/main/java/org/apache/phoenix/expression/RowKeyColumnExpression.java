@@ -108,7 +108,8 @@ public class RowKeyColumnExpression  extends ColumnExpression {
         // Null is represented in the last expression of a multi-part key 
         // by the bytes not being present.
         int maxOffset = ptr.getOffset() + ptr.getLength();
-        if (offset < maxOffset) {
+        // 空字符串 byte[] 长度为0
+        if (offset <= maxOffset) {
             byte[] buffer = ptr.get();
             int byteSize = -1;
             // FIXME: fixedByteSize <= maxByteSize ? fixedByteSize : 0 required because HBase passes bogus keys to filter to position scan (HBASE-6562)

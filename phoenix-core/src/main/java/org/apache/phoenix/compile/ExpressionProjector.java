@@ -70,8 +70,13 @@ public class ExpressionProjector implements ColumnProjector {
                 return null;
             }
             if (ptr.getLength() == 0) {
-                return null;
-            }        
+                switch (type) {
+                    case VARCHAR:
+                        return "";
+                    default:
+                        return null;
+                }
+            }
             return type.toObject(ptr, expression.getDataType(), expression.getSortOrder(), expression.getMaxLength(), expression.getScale());
         } catch (RuntimeException e) {
             // FIXME: Expression.evaluate does not throw SQLException
