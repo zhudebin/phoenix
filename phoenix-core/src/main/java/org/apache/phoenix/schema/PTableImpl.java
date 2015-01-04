@@ -445,7 +445,8 @@ public class PTableImpl implements PTable {
     @Override
     public int newKey(ImmutableBytesWritable key, byte[][] values) {
         int nValues = values.length;
-        while (nValues > 0 && (values[nValues-1] == null || values[nValues-1].length == 0)) {
+        // 此处不能判断它的长度，否则空字符串就会被过滤，此处可不可以不判断？？
+        while (nValues > 0 && (values[nValues-1] == null)) {
             nValues--;
         }
         int i = 0;
@@ -469,8 +470,12 @@ public class PTableImpl implements PTable {
                 type = column.getDataType();
                 // This will throw if the value is null and the type doesn't allow null
                 byte[] byteValue = values[i++];
-                if (byteValue == null) {
-                    byteValue = ByteUtil.EMPTY_BYTE_ARRAY;
+                if (byteValue == null ) {
+                    if(!column.isNullable()) {
+                        throw new ConstraintViolationException(name.getString() + "." + column.getName().getString() + " may not be null");
+                    } else {
+                        byteValue = ByteUtil.EMPTY_BYTE_ARRAY;
+                    }
                 }
                 // An empty byte array return value means null. Do this,
                 // since a type may have muliple representations of null.
@@ -478,9 +483,9 @@ public class PTableImpl implements PTable {
                 // as null. This way we don't need to leak that part of the
                 // implementation outside of PDataType by checking the value
                 // here.
-                if (byteValue.length == 0 && !column.isNullable()) { 
-                    throw new ConstraintViolationException(name.getString() + "." + column.getName().getString() + " may not be null");
-                }
+//                if (byteValue.length == 0 && !column.isNullable()) {
+//                    throw new ConstraintViolationException(name.getString() + "." + column.getName().getString() + " may not be null");
+//                }
                 Integer	maxLength = column.getMaxLength();
                 if (maxLength != null && type.isFixedWidth() && byteValue.length <= maxLength) {
                     byteValue = StringUtil.padChar(byteValue, maxLength);
