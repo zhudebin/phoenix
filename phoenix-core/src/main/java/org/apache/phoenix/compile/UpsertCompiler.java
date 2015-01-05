@@ -42,6 +42,7 @@ import org.apache.phoenix.exception.SQLExceptionCode;
 import org.apache.phoenix.exception.SQLExceptionInfo;
 import org.apache.phoenix.execute.AggregatePlan;
 import org.apache.phoenix.execute.MutationState;
+import org.apache.phoenix.expression.BaseTerminalExpression;
 import org.apache.phoenix.expression.Determinism;
 import org.apache.phoenix.expression.Expression;
 import org.apache.phoenix.expression.LiteralExpression;
@@ -754,6 +755,14 @@ public class UpsertCompiler {
                     sequenceManager.newSequenceTuple(null);
                 for (Expression constantExpression : constantExpressions) {
                     PColumn column = allColumns.get(columnIndexes[nodeIndex]);
+                    if(constantExpression instanceof LiteralExpression) {
+                        Object obj = ((LiteralExpression) constantExpression).getValue();
+                        if(obj == null && constantExpression.getDataType() == PDataType.VARCHAR) {
+                            values[nodeIndex] = null;
+                            nodeIndex++;
+                            continue;
+                        }
+                    }
                     constantExpression.evaluate(tuple, ptr);
                     Object value = null;
                     if (constantExpression.getDataType() != null) {
@@ -773,7 +782,7 @@ public class UpsertCompiler {
                     }
                     column.getDataType().coerceBytes(ptr, value,
                             constantExpression.getDataType(), constantExpression.getMaxLength(), constantExpression.getScale(), constantExpression.getSortOrder(),
-                            column.getMaxLength(), column.getScale(),column.getSortOrder());
+                            column.getMaxLength(), column.getScale(), column.getSortOrder());
                     if (overlapViewColumns.contains(column) && Bytes.compareTo(ptr.get(), ptr.getOffset(), ptr.getLength(), column.getViewConstant(), 0, column.getViewConstant().length-1) != 0) {
                         throw new SQLExceptionInfo.Builder(
                                 SQLExceptionCode.CANNOT_UPDATE_VIEW_COLUMN)

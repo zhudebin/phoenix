@@ -90,7 +90,9 @@ public enum PDataType {
                 throwConstraintViolationException(actualType, this);
             }
             if (length == 0) {
-                return null;
+                if(actualType != PDataType.VARCHAR) {
+                    return null;
+                }
             }
             if (sortOrder == SortOrder.DESC) {
                 bytes = SortOrder.invert(bytes, offset, length);
@@ -105,7 +107,7 @@ public enum PDataType {
             case VARCHAR:
             case CHAR:
                 String s = (String)object;
-                return s == null || s.length() > 0 ? s : null;
+                return s;
             default:
                 return throwConstraintViolationException(actualType,this);
             }
@@ -7112,7 +7114,11 @@ public enum PDataType {
      * for null.
      */
     public final boolean isNull(byte[] value) {
-        return value == null || value.length == 0;
+        if(value == null) {
+            return true;
+        } else {
+            return value.length == 0 && this != PDataType.VARCHAR;
+        }
     }
     
     public byte[] toBytes(Object object, SortOrder sortOrder) {
@@ -7129,7 +7135,7 @@ public enum PDataType {
             Integer desiredMaxLength, Integer desiredScale, SortOrder expectedModifier) {
         Preconditions.checkNotNull(actualModifier);
         Preconditions.checkNotNull(expectedModifier);
-        if (ptr.getLength() == 0) {
+        if (ptr.getLength() == 0 && actualType != PDataType.VARCHAR) {
             return;
         }
         if (this.isBytesComparableWith(actualType)) { // No coerce necessary

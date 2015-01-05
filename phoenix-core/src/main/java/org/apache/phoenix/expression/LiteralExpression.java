@@ -170,7 +170,7 @@ public class LiteralExpression extends BaseTerminalExpression {
         } else if (type.isArrayType()) {
             maxLength = ((PhoenixArray)value).getMaxLength();
         }
-        if (b.length == 0) {
+        if (b.length == 0 && type != PDataType.VARCHAR) {
             return getTypedNullLiteralExpression(type, determinism);
         }
         if (maxLength == null) {
