@@ -19,6 +19,7 @@ package org.apache.phoenix.jdbc;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.sql.ParameterMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -149,7 +150,7 @@ import com.google.common.collect.Lists;
  * 
  * @since 0.1
  */
-public class PhoenixStatement implements Statement, SQLCloseable, org.apache.phoenix.jdbc.Jdbc7Shim.Statement {
+public class PhoenixStatement implements Statement, SQLCloseable, Serializable, org.apache.phoenix.jdbc.Jdbc7Shim.Statement {
     private static final Logger logger = LoggerFactory.getLogger(PhoenixStatement.class);
     
     public enum Operation {

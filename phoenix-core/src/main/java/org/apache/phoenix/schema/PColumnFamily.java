@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.schema;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Collection;
  * 
  * @since 0.1
  */
-public interface PColumnFamily {
+public interface PColumnFamily extends Serializable {
     
     /**
      * @return The column family name.

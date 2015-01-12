@@ -21,6 +21,8 @@ import org.apache.phoenix.hbase.index.util.ImmutableBytesPtr;
 import org.apache.phoenix.query.QueryConstants;
 import org.apache.phoenix.util.ByteUtil;
 
+import java.io.Serializable;
+
 
 /**
  * 
@@ -30,7 +32,7 @@ import org.apache.phoenix.util.ByteUtil;
  * 
  * @since 0.1
  */
-public interface PName {
+public interface PName extends Serializable {
     public static PName EMPTY_NAME = new PName() {
         @Override
         public String getString() {

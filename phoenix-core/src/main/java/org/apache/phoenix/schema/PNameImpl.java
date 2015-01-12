@@ -22,11 +22,13 @@ import org.apache.http.annotation.Immutable;
 import org.apache.phoenix.hbase.index.util.ImmutableBytesPtr;
 import org.apache.phoenix.util.SizedUtil;
 
+import java.io.Serializable;
+
 @Immutable
 public class PNameImpl implements PName {
     /**
      */
-    private static class PNameImplData {
+    private static class PNameImplData implements Serializable {
         /**  */
         public String stringName;
         /**  */

@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.jdbc;
 
+import java.io.Serializable;
 import java.sql.ParameterMetaData;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -38,7 +39,7 @@ import org.apache.phoenix.schema.TypeMismatchException;
  * 
  * @since 0.1
  */
-public class PhoenixParameterMetaData implements ParameterMetaData {
+public class PhoenixParameterMetaData implements ParameterMetaData, Serializable {
     private final PDatum[] params;
     private static final PDatum EMPTY_DATUM = new PDatum() {
         @Override

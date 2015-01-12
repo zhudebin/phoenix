@@ -18,7 +18,9 @@
 package org.apache.phoenix.schema;
 
 
-public interface PDatum {
+import java.io.Serializable;
+
+public interface PDatum extends Serializable {
     /**
      * @return is this column nullable?
      */

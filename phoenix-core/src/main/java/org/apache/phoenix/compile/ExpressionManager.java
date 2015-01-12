@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.compile;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ import org.apache.phoenix.expression.Expression;
  * 
  * @since 0.1
  */
-public class ExpressionManager {
+public class ExpressionManager implements Serializable {
     // Use a Map instead of a Set because we need to get and return
     // the existing Expression
     private final Map<Expression, Expression> expressionMap;

@@ -19,6 +19,8 @@ package org.apache.phoenix.compile;
 
 import org.apache.phoenix.expression.aggregator.ClientAggregators;
 
+import java.io.Serializable;
+
 /**
  * 
  * Class that manages aggregations during query compilation
@@ -26,7 +28,7 @@ import org.apache.phoenix.expression.aggregator.ClientAggregators;
  * 
  * @since 0.1
  */
-public class AggregationManager {
+public class AggregationManager implements Serializable {
     private ClientAggregators aggregators;
     private int position = 0;
     

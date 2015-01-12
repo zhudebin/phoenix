@@ -23,9 +23,10 @@ import org.apache.phoenix.query.QueryConstants;
 import org.apache.phoenix.util.IndexUtil;
 import org.apache.phoenix.util.SchemaUtil;
 
+import java.io.Serializable;
 
 
-public class TableRef {
+public class TableRef implements Serializable {
     private PTable table;
     private final String alias;
     private final long upperBoundTimeStamp;

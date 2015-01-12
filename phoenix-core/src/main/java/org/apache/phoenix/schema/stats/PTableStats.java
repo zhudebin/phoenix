@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.schema.stats;
 
+import java.io.Serializable;
 import java.util.SortedMap;
 
 import com.google.common.collect.ImmutableSortedMap;
@@ -26,7 +27,7 @@ import com.google.common.collect.ImmutableSortedMap;
  * The table is defined on the client side, but it is populated on the server side. The client should not populate any data to the
  * statistics object.
  */
-public interface PTableStats {
+public interface PTableStats extends Serializable {
     public static final PTableStats EMPTY_STATS = new PTableStats() {
         @Override
         public SortedMap<byte[], GuidePostsInfo> getGuidePosts() {

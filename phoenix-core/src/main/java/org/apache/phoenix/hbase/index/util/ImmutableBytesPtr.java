@@ -19,11 +19,12 @@ package org.apache.phoenix.hbase.index.util;
 
 import java.io.DataInput;
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.util.Bytes;
 
-public class ImmutableBytesPtr extends ImmutableBytesWritable {
+public class ImmutableBytesPtr extends ImmutableBytesWritable implements Serializable {
     private int hashCode;
     
     public ImmutableBytesPtr() {

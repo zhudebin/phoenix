@@ -9,6 +9,7 @@
 package org.apache.phoenix.schema.stats;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import org.apache.phoenix.hbase.index.util.ImmutableBytesPtr;
 /**
  * The scanner that does the scanning to collect the stats during major compaction.{@link StatisticsCollector}
  */
-public class StatisticsScanner implements InternalScanner {
+public class StatisticsScanner implements InternalScanner, Serializable {
     private static final Log LOG = LogFactory.getLog(StatisticsScanner.class);
     private InternalScanner delegate;
     private StatisticsWriter stats;

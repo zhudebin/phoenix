@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.compile;
 
+import java.io.Serializable;
 import java.sql.ParameterMetaData;
 import java.sql.SQLException;
 import java.util.List;
@@ -45,7 +46,7 @@ import org.apache.phoenix.schema.PDatum;
  * 
  * @since 0.1
  */
-public class BindManager {
+public class BindManager implements Serializable {
     public static final Object UNBOUND_PARAMETER = new Object();
 
     private final List<Object> binds;

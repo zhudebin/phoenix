@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.compile;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import org.apache.phoenix.schema.TableRef;
  * 
  * @since 0.1
  */
-public interface ColumnResolver {
+public interface ColumnResolver extends Serializable {
     
     /**
      * Returns the collection of resolved tables in the FROM clause.

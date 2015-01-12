@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.schema;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -40,7 +41,7 @@ import com.google.common.primitives.Longs;
  *
  */
 public class PMetaDataImpl implements PMetaData {
-        private static final class PTableRef {
+        private static final class PTableRef implements Serializable {
             public final PTable table;
             public final int estSize;
             public volatile long lastAccessTime;
@@ -60,7 +61,7 @@ public class PMetaDataImpl implements PMetaData {
             }
         }
 
-        private static class PTableCache implements Cloneable {
+        private static class PTableCache implements Cloneable, Serializable {
             private static final int MIN_REMOVAL_SIZE = 3;
             private static final Comparator<PTableRef> COMPARATOR = new Comparator<PTableRef>() {
                 @Override

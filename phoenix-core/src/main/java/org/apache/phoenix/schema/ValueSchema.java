@@ -20,6 +20,7 @@ package org.apache.phoenix.schema;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ import com.google.common.collect.Lists;
  * 
  * @since 0.1
  */
-public abstract class ValueSchema implements Writable {
+public abstract class ValueSchema implements Writable, Serializable {
     public static final int ESTIMATED_VARIABLE_LENGTH_SIZE = 10;
     private int[] fieldIndexByPosition;
     private List<Field> fields;

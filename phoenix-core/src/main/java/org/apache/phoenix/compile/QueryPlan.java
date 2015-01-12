@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.compile;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -37,7 +38,7 @@ import org.apache.phoenix.schema.TableRef;
  * 
  * @since 0.1
  */
-public interface QueryPlan extends StatementPlan {
+public interface QueryPlan extends StatementPlan, Serializable {
     /**
      * Get a result iterator to iterate over the results
      * @return result iterator for iterating over the results

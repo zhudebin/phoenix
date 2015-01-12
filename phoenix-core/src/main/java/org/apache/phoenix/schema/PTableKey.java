@@ -19,7 +19,9 @@ package org.apache.phoenix.schema;
 
 import com.google.common.base.Preconditions;
 
-public class PTableKey {
+import java.io.Serializable;
+
+public class PTableKey implements Serializable {
     private final PName tenantId;
     private final String name;
     

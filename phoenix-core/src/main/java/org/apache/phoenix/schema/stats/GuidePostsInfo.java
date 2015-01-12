@@ -1,9 +1,6 @@
 package org.apache.phoenix.schema.stats;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +31,7 @@ import com.google.common.collect.Lists;
 /**
  *  A simple POJO class that holds the information related to GuidePosts serDe.
  */
-public class GuidePostsInfo {
+public class GuidePostsInfo implements Serializable {
 	public static final GuidePostsInfo EMPTY_GUIDE_POSTS_INFO = new GuidePostsInfo(0L, Collections.<byte[]>emptyList());
 	
     private long byteCount; // Number of bytes traversed in the region

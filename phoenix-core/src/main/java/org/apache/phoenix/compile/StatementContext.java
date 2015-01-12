@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.compile;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.Format;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ import com.google.common.collect.Maps;
  *
  * @since 0.1
  */
-public class StatementContext {
+public class StatementContext implements Serializable {
     private ColumnResolver resolver;
     private final BindManager binds;
     private final Scan scan;

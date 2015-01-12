@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.query;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import org.apache.phoenix.schema.PTable;
  * 
  * @since 0.1
  */
-public interface MetaDataMutated {
+public interface MetaDataMutated extends Serializable {
     PMetaData addTable(PTable table) throws SQLException;
     PMetaData removeTable(PName tenantId, String tableName, String parentTableName, long tableTimeStamp) throws SQLException;
     PMetaData addColumn(PName tenantId, String tableName, List<PColumn> columns, long tableTimeStamp, long tableSeqNum, boolean isImmutableRows) throws SQLException;
