@@ -20,6 +20,8 @@ package org.apache.phoenix.schema.tuple;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 
+import java.io.Serializable;
+
 /**
  * 
  * Interface representing an ordered list of KeyValues returned as the
@@ -29,7 +31,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
  * 
  * @since 0.1
  */
-public interface Tuple {
+public interface Tuple extends Serializable {
     /**
      * @return Number of KeyValues contained by the Tuple.
      */
