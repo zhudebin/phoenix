@@ -19,6 +19,7 @@ package org.apache.phoenix.filter;
 
 import java.io.DataInput;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
@@ -58,7 +59,7 @@ public abstract class MultiKeyValueComparisonFilter extends BooleanExpressionFil
         init();
     }
 
-    private static final class KeyValueRef {
+    private static final class KeyValueRef implements Serializable {
         public KeyValue keyValue;
         
         @Override

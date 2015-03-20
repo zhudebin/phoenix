@@ -17,6 +17,7 @@
  */
 package org.apache.phoenix.expression;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -33,7 +34,7 @@ import org.apache.phoenix.schema.tuple.Tuple;
  * 
  * @since 0.1
  */
-public interface Expression extends PDatum, Writable {
+public interface Expression extends PDatum, Writable, Serializable {
 	
     /**
      * Access the value by setting a pointer to it (as opposed to making

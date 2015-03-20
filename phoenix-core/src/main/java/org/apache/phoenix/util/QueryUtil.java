@@ -18,19 +18,11 @@
 
 package org.apache.phoenix.util;
 
-import static org.apache.phoenix.util.SchemaUtil.getEscapedFullColumnName;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.Nullable;
-
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -41,48 +33,55 @@ import org.apache.phoenix.iterate.ResultIterator;
 import org.apache.phoenix.jdbc.PhoenixDriver;
 import org.apache.phoenix.parse.WildcardParseNode;
 import org.apache.phoenix.query.QueryServices;
+import org.apache.phoenix.util.ColumnInfo;
+import org.apache.phoenix.util.PhoenixRuntime;
+import org.apache.phoenix.util.SchemaUtil;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
+import javax.annotation.Nullable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import static org.apache.phoenix.util.SchemaUtil.getEscapedFullColumnName;
 
 public final class QueryUtil {
 
-    private static final Log LOG = LogFactory.getLog(QueryUtil.class);
+    private static final Log LOG = LogFactory.getLog(org.apache.phoenix.util.QueryUtil.class);
 
     /**
-     *  Column family name index within ResultSet resulting from {@link DatabaseMetaData#getColumns(String, String, String, String)}
+     *  Column family name index within ResultSet resulting from {@link java.sql.DatabaseMetaData#getColumns(String, String, String, String)}
      */
     public static final int COLUMN_FAMILY_POSITION = 24;
 
     /**
-     *  Column name index within ResultSet resulting from {@link DatabaseMetaData#getColumns(String, String, String, String)}
+     *  Column name index within ResultSet resulting from {@link java.sql.DatabaseMetaData#getColumns(String, String, String, String)}
      */
     public static final int COLUMN_NAME_POSITION = 4;
 
     /**
-     * Data type index within ResultSet resulting from {@link DatabaseMetaData#getColumns(String, String, String, String)}
+     * Data type index within ResultSet resulting from {@link java.sql.DatabaseMetaData#getColumns(String, String, String, String)}
      */
     public static final int DATA_TYPE_POSITION = 5;
 
     /**
      * Index of the column containing the datatype name  within ResultSet resulting from {@link
-     * DatabaseMetaData#getColumns(String, String, String, String)}.
+     * java.sql.DatabaseMetaData#getColumns(String, String, String, String)}.
      */
     public static final int DATA_TYPE_NAME_POSITION = 6;
 
     private static final String SELECT = "SELECT";
     private static final String FROM = "FROM";
     private static final String WHERE = "WHERE";
-    
+
     /**
      * Private constructor
      */
     private QueryUtil() {
     }
-
     /**
      * Generate an upsert statement based on a list of {@code ColumnInfo}s with parameter markers. The list of
      * {@code ColumnInfo}s must contain at least one element.
@@ -140,34 +139,38 @@ public final class QueryUtil {
         }
         return String.format("UPSERT INTO %s VALUES (%s)", tableName, Joiner.on(", ").join(parameterList));
     }
-    
+
     /**
-     * 
+     *
      * @param fullTableName name of the table for which the select statement needs to be created.
      * @param columnInfos  list of columns to be projected in the select statement.
+     * @param conditions   The condition clause to be added to the WHERE condition
      * @return Select Query 
      */
-    public static String constructSelectStatement(String fullTableName, List<ColumnInfo> columnInfos) {
+    public static String constructSelectStatement(String fullTableName, List<ColumnInfo> columnInfos,final String conditions) {
         Preconditions.checkNotNull(fullTableName,"Table name cannot be null");
         if(columnInfos == null || columnInfos.isEmpty()) {
-             throw new IllegalArgumentException("At least one column must be provided");
+            throw new IllegalArgumentException("At least one column must be provided");
         }
         // escape the table name to ensure it is case sensitive.
         final String escapedFullTableName = SchemaUtil.getEscapedFullTableName(fullTableName);
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT ");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
         for (ColumnInfo cinfo : columnInfos) {
             if (cinfo != null) {
                 String fullColumnName = getEscapedFullColumnName(cinfo.getColumnName());
-                sb.append(fullColumnName);
-                sb.append(",");
-             }
-         }
+                query.append(fullColumnName);
+                query.append(",");
+            }
+        }
         // Remove the trailing comma
-        sb.setLength(sb.length() - 1);
-        sb.append(" FROM ");
-        sb.append(escapedFullTableName);
-        return sb.toString();
+        query.setLength(query.length() - 1);
+        query.append(" FROM ");
+        query.append(escapedFullTableName);
+        if(conditions != null && conditions.length() > 0) {
+            query.append(" WHERE (").append(conditions).append(")");
+        }
+        return query.toString();
     }
 
     public static String getUrl(String server) {
@@ -258,7 +261,7 @@ public final class QueryUtil {
 
         return getUrl(server, port);
     }
-    
+
     public static String getViewStatement(String schemaName, String tableName, Expression whereClause) {
         // Only form we currently support for VIEWs: SELECT * FROM t WHERE ...
         return SELECT + " " + WildcardParseNode.NAME + " " + FROM + " " +
