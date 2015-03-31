@@ -24,7 +24,7 @@ import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.phoenix.expression.Expression;
 import org.apache.phoenix.schema.types.PDataType;
 import org.apache.phoenix.schema.tuple.Tuple;
-
+import org.apache.phoenix.schema.types.PVarchar;
 
 
 /**
@@ -69,7 +69,7 @@ public class ExpressionProjector implements ColumnProjector {
             if (!expression.evaluate(tuple, ptr)) {
                 return null;
             }
-            if (ptr.getLength() == 0) {
+            if (ptr.getLength() == 0 && !type.equals(PVarchar.INSTANCE)) {
                 return null;
             }        
             return type.toObject(ptr, expression.getDataType(), expression.getSortOrder(), expression.getMaxLength(), expression.getScale());

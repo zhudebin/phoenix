@@ -790,7 +790,8 @@ public abstract class PDataType<T> implements DataType<T>, Comparable<PDataType<
    * for null.
    */
   public final boolean isNull(byte[] value) {
-    return value == null || value.length == 0;
+//    return value == null || value.length == 0;
+    return value == null;
   }
 
   public byte[] toBytes(Object object, SortOrder sortOrder) {

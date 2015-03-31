@@ -43,6 +43,11 @@ public class PVarchar extends PDataType<String> {
     if (object == null) {
       return ByteUtil.EMPTY_BYTE_ARRAY;
     }
+    /**
+    if(object == null) {
+      return null;
+    }
+     */
     return Bytes.toBytes((String) object);
   }
 
@@ -62,7 +67,7 @@ public class PVarchar extends PDataType<String> {
     if (!actualType.isCoercibleTo(this)) {
       throwConstraintViolationException(actualType, this);
     }
-    if (length == 0) {
+    if (length == 0 && !actualType.equals(PVarchar.INSTANCE)) {
       return null;
     }
     if (sortOrder == SortOrder.DESC) {
@@ -76,7 +81,7 @@ public class PVarchar extends PDataType<String> {
   public Object toObject(Object object, PDataType actualType) {
     if (equalsAny(actualType, this, PChar.INSTANCE)) {
       String s = (String) object;
-      return s == null || s.length() > 0 ? s : null;
+      return s == null ? null : s;
     }
     return throwConstraintViolationException(actualType, this);
   }

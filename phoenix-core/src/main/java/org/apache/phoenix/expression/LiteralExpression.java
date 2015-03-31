@@ -181,9 +181,15 @@ public class LiteralExpression extends BaseTerminalExpression {
         } else if (type.isArrayType()) {
             maxLength = ((PhoenixArray)value).getMaxLength();
         }
+        // 空字符
+        if(b == null) {
+            return getTypedNullLiteralExpression(type, determinism);
+        }
+        /**
         if (b.length == 0) {
             return getTypedNullLiteralExpression(type, determinism);
         }
+         */
         if (maxLength == null) {
             maxLength = type == null || !type.isFixedWidth() ? null : type.getMaxLength(value);
         }
