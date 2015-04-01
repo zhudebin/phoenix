@@ -67,6 +67,9 @@ public class PVarchar extends PDataType<String> {
     if (!actualType.isCoercibleTo(this)) {
       throwConstraintViolationException(actualType, this);
     }
+    if(bytes == null) {
+      return null;
+    }
     if (length == 0 && !actualType.equals(PVarchar.INSTANCE)) {
       return null;
     }

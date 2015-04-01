@@ -764,6 +764,14 @@ public class UpsertCompiler {
                 Tuple tuple = sequenceManager.getSequenceCount() == 0 ? null :
                     sequenceManager.newSequenceTuple(null);
                 for (Expression constantExpression : constantExpressions) {
+                    if(constantExpression instanceof LiteralExpression) {
+                        Object ob = ((LiteralExpression)constantExpression).getValue();
+                        if(ob == null) {
+                            values[nodeIndex] = null;
+                            nodeIndex++;
+                            continue;
+                        }
+                    }
                     PColumn column = allColumns.get(columnIndexes[nodeIndex]);
                     constantExpression.evaluate(tuple, ptr);
                     Object value = null;
