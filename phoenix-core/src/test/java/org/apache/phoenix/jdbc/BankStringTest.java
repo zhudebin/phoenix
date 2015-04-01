@@ -16,8 +16,8 @@ public class BankStringTest {
 
     @Before
     public void before() throws Exception {
-        Properties pro = new Properties();
-        pro.setProperty("phoenix.table.default.store.nulls","true");
+//        Properties pro = new Properties();
+//        pro.setProperty("phoenix.table.default.store.nulls","true");
         Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
         con = DriverManager.getConnection("jdbc:phoenix:e221,e222,e223:2181");
     }
